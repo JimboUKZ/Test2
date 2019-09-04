@@ -201,7 +201,7 @@
       "location": "[parameters('location')]",
       "copy": {
         "name": "vmcopy",
-        "count": 5
+        "count": 6
       },
       "dependsOn": [
         "[concat('Microsoft.Compute/virtualMachines/',toLower(parameters('prefix')),variables('vmname')[copyIndex()])]"
@@ -264,7 +264,7 @@
       "location": "[parameters('location')]",
       "copy": {
         "name": "nicopy",
-        "count": 5
+        "count": 6
       },
       "dependsOn": [
         "[concat('Microsoft.Network/virtualNetworks/', variables('virtualNetworkName'))]",
@@ -299,7 +299,7 @@
       "location": "[parameters('location')]",
       "copy": {
         "name": "ipcopy",
-        "count": 5
+        "count": 6
       },
       "properties": {
         "publicIpAllocationMethod": "[variables('networkSettings').publicIpAllocationMethod]"
