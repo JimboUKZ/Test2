@@ -7,7 +7,9 @@
         [Parameter(Mandatory)]
         [String]$DCName,
         [Parameter(Mandatory)]
-        [String]$DPMPName,
+        [String]$DPMP1Name,
+        [Parameter(Mandatory)]
+        [String]$DPMP2Name,
         [Parameter(Mandatory)]
         [String]$ClientName,
         [Parameter(Mandatory)]
@@ -25,7 +27,8 @@
     $CM = "CMCB"
     $DName = $DomainName.Split(".")[0]
     $PSComputerAccount = "$DName\$PSName$"
-    $DPMPComputerAccount = "$DName\$DPMPName$"
+    $DPMP1ComputerAccount = "$DName\$DPMP1Name$"
+    $DPMP2ComputerAccount = "$DName\$DPMP2Name$"
     $ClientComputerAccount = "$DName\$ClientName$"
 
     [System.Management.Automation.PSCredential]$DomainCreds = New-Object System.Management.Automation.PSCredential ("${DomainName}\$($Admincreds.UserName)", $Admincreds.Password)
@@ -140,9 +143,17 @@
             DependsOn = "[WriteConfigurationFile]WritePSJoinDomain"
         }
 
-        DelegateControl AddDPMP
+        DelegateControl AddDPMP1
         {
-            Machine = $DPMPName
+            Machine = $DPMP1Name
+            DomainFullName = $DomainName
+            Ensure = "Present"
+            DependsOn = "[WriteConfigurationFile]WriteDPMPJoinDomain"
+        }
+
+        DelegateControl AddDPMP2
+        {
+            Machine = $DPMP2Name
             DomainFullName = $DomainName
             Ensure = "Present"
             DependsOn = "[WriteConfigurationFile]WriteDPMPJoinDomain"

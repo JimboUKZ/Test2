@@ -72,13 +72,15 @@
     },
     "vmrole": [
       "DC",
-      "DPMP",
+      "DPMP1",
+      "DPMP2",
       "Client",
       "PS"
     ],
     "vmname": [
       "DC01",
-      "DPMP01",
+      "DPMP1",
+      "DPMP2",
       "Cl01",
       "PS01"
     ],
@@ -86,9 +88,11 @@
       "Premium_LRS",
       "Premium_LRS",
       "Premium_LRS",
+      "Premium_LRS",
       "Premium_LRS"
     ],
     "vmSize": [
+      "Standard_B2s",
       "Standard_B2s",
       "Standard_B2s",
       "Standard_B2s",
@@ -101,7 +105,13 @@
         "sku": "2019-Datacenter",
         "version": "latest"
       },
-      "DPMP": {
+      "DPMP1": {
+        "publisher": "MicrosoftWindowsServer",
+        "offer": "WindowsServer",
+        "sku": "2019-Datacenter",
+        "version": "latest"
+      },
+      "DPMP2": {
         "publisher": "MicrosoftWindowsServer",
         "offer": "WindowsServer",
         "sku": "2019-Datacenter",
@@ -181,7 +191,7 @@
       "location": "[parameters('location')]",
       "copy": {
         "name": "vmcopy",
-        "count": 4
+        "count": 5
       },
       "dependsOn": [
         "[concat('Microsoft.Compute/virtualMachines/',toLower(parameters('prefix')),variables('vmname')[copyIndex()])]"
@@ -242,7 +252,7 @@
       "location": "[parameters('location')]",
       "copy": {
         "name": "nicopy",
-        "count": 4
+        "count": 5
       },
       "dependsOn": [
         "[concat('Microsoft.Network/virtualNetworks/', variables('virtualNetworkName'))]",
@@ -277,7 +287,7 @@
       "location": "[parameters('location')]",
       "copy": {
         "name": "ipcopy",
-        "count": 4
+        "count": 5
       },
       "properties": {
         "publicIpAllocationMethod": "[variables('networkSettings').publicIpAllocationMethod]"

@@ -7,7 +7,9 @@
         [Parameter(Mandatory)]
         [String]$DCName,
         [Parameter(Mandatory)]
-        [String]$DPMPName,
+        [String]$DPMP1Name,
+        [Parameter(Mandatory)]
+        [String]$DPMP2Name,
         [Parameter(Mandatory)]
         [String]$ClientName,
         [Parameter(Mandatory)]
@@ -25,7 +27,8 @@
     $LogPath = "c:\$LogFolder"
     $DName = $DomainName.Split(".")[0]
     $DCComputerAccount = "$DName\$DCName$"
-    $DPMPComputerAccount = "$DName\$DPMPName$"
+    $DPMP1ComputerAccount = "$DName\$DPMP1Name$"
+    $DPMP2ComputerAccount = "$DName\$DPMP2Name$"
     
     [System.Management.Automation.PSCredential]$DomainCreds = New-Object System.Management.Automation.PSCredential ("${DomainName}\$($Admincreds.UserName)", $Admincreds.Password)
 
@@ -135,12 +138,22 @@
             DependsOn = "[ChangeSQLServicesAccount]ChangeToLocalSystem"
         }
 
-        RegisterTaskScheduler InstallAndUpdateSCCM
+        RegisterTaskScheduler InstallAndUpdateSCCM1
         {
             TaskName = "ScriptWorkFlow"
             ScriptName = "ScriptWorkFlow.ps1"
             ScriptPath = $PSScriptRoot
-            ScriptArgument = "$DomainName $CM $DName\$($Admincreds.UserName) $DPMPName $ClientName"
+            ScriptArgument = "$DomainName $CM $DName\$($Admincreds.UserName) $DPMP1Name $ClientName"
+            Ensure = "Present"
+            DependsOn = "[FileReadAccessShare]CMSourceSMBShare"
+        }
+
+        RegisterTaskScheduler InstallAndUpdateSCCM2
+        {
+            TaskName = "ScriptWorkFlow"
+            ScriptName = "ScriptWorkFlow.ps1"
+            ScriptPath = $PSScriptRoot
+            ScriptArgument = "$DomainName $CM $DName\$($Admincreds.UserName) $DPMP2Name $ClientName"
             Ensure = "Present"
             DependsOn = "[FileReadAccessShare]CMSourceSMBShare"
         }
