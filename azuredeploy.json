@@ -149,7 +149,7 @@
       "location": "[parameters('location')]",
       "copy": {
         "name": "vmcopy",
-        "count": 3
+        "count": 5
       },
       "dependsOn": [
         "[concat('Microsoft.Network/networkInterfaces/',toLower(parameters('prefix')),toLower(variables('vmname')[copyIndex()]), '-ni')]"
