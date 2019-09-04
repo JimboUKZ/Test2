@@ -30,7 +30,7 @@
       "metadata": {
         "description": "The base URI where artifacts required by this template are located including a trailing '/'"
       },
-      "defaultValue": "https://github.com/JimboUKZ/Test2"
+      "defaultValue": "https://github.com/JimboUKZ/Test2/tree/master"
     },
     "_artifactsLocationSasToken": {
       "type": "securestring",
