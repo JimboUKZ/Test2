@@ -11,7 +11,9 @@
         [Parameter(Mandatory)]
         [String]$DPMP2Name,
         [Parameter(Mandatory)]
-        [String]$ClientName,
+        [String]$Client1Name,
+        [Parameter(Mandatory)]
+        [String]$Client2Name,
         [Parameter(Mandatory)]
         [String]$PSName,
         [Parameter(Mandatory)]
@@ -29,7 +31,8 @@
     $PSComputerAccount = "$DName\$PSName$"
     $DPMP1ComputerAccount = "$DName\$DPMP1Name$"
     $DPMP2ComputerAccount = "$DName\$DPMP2Name$"
-    $ClientComputerAccount = "$DName\$ClientName$"
+    $Client1ComputerAccount = "$DName\$Client1Name$"
+    $Client2ComputerAccount = "$DName\$Client2Name$"
 
     [System.Management.Automation.PSCredential]$DomainCreds = New-Object System.Management.Automation.PSCredential ("${DomainName}\$($Admincreds.UserName)", $Admincreds.Password)
 
@@ -77,14 +80,28 @@
 
         VerifyComputerJoinDomain WaitForDPMP
         {
-            ComputerName = $DPMPName
+            ComputerName = $DPMP1Name
+            Ensure = "Present"
+            DependsOn = "[InstallCA]InstallCA"
+        }
+
+        VerifyComputerJoinDomain WaitForDPMP
+        {
+            ComputerName = $DPMP2Name
             Ensure = "Present"
             DependsOn = "[InstallCA]InstallCA"
         }
 
         VerifyComputerJoinDomain WaitForClient
         {
-            ComputerName = $ClientName
+            ComputerName = $Client1Name
+            Ensure = "Present"
+            DependsOn = "[InstallCA]InstallCA"
+        }
+
+        VerifyComputerJoinDomain WaitForClient
+        {
+            ComputerName = $Client2Name
             Ensure = "Present"
             DependsOn = "[InstallCA]InstallCA"
         }

@@ -50,7 +50,7 @@
   "variables": {
     "dscScript": "DSC/DCConfiguration.zip",
     "virtualNetworkName": "[concat(toLower(parameters('prefix')), '-vnet')]",
-    "domainName": "contoso.com",
+    "domainName": "Tadpolelab.com",
     "networkSettings": {
       "virtualNetworkAddressPrefix": "10.0.0.0/16",
       "subnetAddressPrefix": "10.0.0.0/24",
@@ -74,7 +74,8 @@
       "DC",
       "DPMP1",
       "DPMP2",
-      "Client",
+      "Client1",
+      "Client2",
       "PS"
     ],
     "vmname": [
@@ -82,6 +83,7 @@
       "DPMP1",
       "DPMP2",
       "Cl01",
+      "Cl02",
       "PS01"
     ],
     "vmDiskType": [
@@ -89,9 +91,11 @@
       "Premium_LRS",
       "Premium_LRS",
       "Premium_LRS",
+      "Premium_LRS",
       "Premium_LRS"
     ],
     "vmSize": [
+      "Standard_B2s",
       "Standard_B2s",
       "Standard_B2s",
       "Standard_B2s",
@@ -117,7 +121,13 @@
         "sku": "2019-Datacenter",
         "version": "latest"
       },
-      "Client": {
+      "Client1": {
+        "publisher": "MicrosoftWindowsDesktop",
+        "offer": "Windows-10",
+        "sku": "19h1-pro",
+        "version": "latest"
+      },
+      "Client2": {
         "publisher": "MicrosoftWindowsDesktop",
         "offer": "Windows-10",
         "sku": "19h1-pro",
@@ -207,9 +217,11 @@
           "Properties": {
             "DomainName": "[variables('domainName')]",
             "DCName": "[concat(parameters('prefix'),variables('vmname')[0])]",
-            "DPMPName": "[concat(parameters('prefix'),variables('vmname')[1])]",
-            "ClientName": "[concat(parameters('prefix'),variables('vmname')[2])]",
-            "PSName": "[concat(parameters('prefix'),variables('vmname')[3])]",
+            "DPMP1Name": "[concat(parameters('prefix'),variables('vmname')[1])]",
+            "DPMP2Name": "[concat(parameters('prefix'),variables('vmname')[2])]",
+            "Client1Name": "[concat(parameters('prefix'),variables('vmname')[3])]",
+            "Client2Name": "[concat(parameters('prefix'),variables('vmname')[4])]",
+            "PSName": "[concat(parameters('prefix'),variables('vmname')[5])]",
             "DNSIPAddress": "[concat(variables('networkSettings').virtualMachinesIPAddress,add(int('0'),int('4')))]",
             "AdminCreds": {
               "UserName": "[parameters('adminUsername')]",
@@ -319,14 +331,14 @@
     {
       "type": "Microsoft.Compute/virtualMachines",
       "apiVersion": "2018-06-01",
-      "name": "[concat(toLower(parameters('prefix')),toLower(variables('vmname')[3]))]",
+      "name": "[concat(toLower(parameters('prefix')),toLower(variables('vmname')[5]))]",
       "location": "[parameters('location')]",
       "dependsOn": [
-        "[concat('Microsoft.Network/networkInterfaces/',toLower(parameters('prefix')),toLower(variables('vmname')[3]), '-ni')]"
+        "[concat('Microsoft.Network/networkInterfaces/',toLower(parameters('prefix')),toLower(variables('vmname')[5]), '-ni')]"
       ],
       "properties": {
         "osProfile": {
-          "computerName": "[concat(toLower(parameters('prefix')),toLower(variables('vmname')[3]))]",
+          "computerName": "[concat(toLower(parameters('prefix')),toLower(variables('vmname')[5]))]",
           "adminUsername": "[parameters('adminUsername')]",
           "adminPassword": "[parameters('adminPassword')]",
           "windowsConfiguration": {
@@ -334,15 +346,15 @@
           }
         },
         "hardwareProfile": {
-          "vmSize": "[variables('vmSize')[3]]"
+          "vmSize": "[variables('vmSize')[5]]"
         },
         "storageProfile": {
-          "imageReference": "[variables('imageReference')[variables('vmrole')[3]]]",
+          "imageReference": "[variables('imageReference')[variables('vmrole')[5]]]",
           "osDisk": {
-            "name": "[concat(toLower(parameters('prefix')),toLower(variables('vmname')[3]),'-OsDisk')]",
+            "name": "[concat(toLower(parameters('prefix')),toLower(variables('vmname')[5]),'-OsDisk')]",
             "createOption": "FromImage",
             "managedDisk": {
-              "storageAccountType": "[variables('vmDiskType')[3]]"
+              "storageAccountType": "[variables('vmDiskType')[5]]"
             }
           },
           "dataDisks": []
@@ -350,7 +362,7 @@
         "networkProfile": {
           "networkInterfaces": [
             {
-              "id": "[resourceId('Microsoft.Network/networkInterfaces',concat(toLower(parameters('prefix')),toLower(variables('vmname')[3]), '-ni'))]"
+              "id": "[resourceId('Microsoft.Network/networkInterfaces',concat(toLower(parameters('prefix')),toLower(variables('vmname')[5]), '-ni'))]"
             }
           ]
         },

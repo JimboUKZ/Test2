@@ -11,7 +11,9 @@
         [Parameter(Mandatory)]
         [String]$DPMP2Name,
         [Parameter(Mandatory)]
-        [String]$ClientName,
+        [String]$Client1Name,
+        [Parameter(Mandatory)]
+        [String]$Client2Name,
         [Parameter(Mandatory)]
         [String]$PSName,
         [Parameter(Mandatory)]
